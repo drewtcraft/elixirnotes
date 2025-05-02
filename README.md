@@ -30,6 +30,41 @@ def get_combinations(tops, bottoms, opt \\ []) do
 end
 ```
 
+### Files
+```elixir
+def read_emails(path) do
+  # open file, second argument has options for how to interact
+  case File.open(path, [:read, :utf8]) do
+    {:ok, pid} ->
+      case IO.read(pid, :eof) do
+        :eof -> [] # case when end of file is reached (or file is empty)
+
+        data -> # split file output on newlines
+          data
+          |> String.split("\n")
+          |> Enum.filter(fn s -> s != "" end)
+      end
+
+    {:error, _} -> []
+  end
+end
+
+def open_log(path) do
+  case File.open(path, [:write]) do
+    {:ok, pid} -> pid
+  end
+end
+
+def log_sent_email(pid, email) do
+  # use IO module to interact with process that is managing file
+  IO.puts(pid, email)
+end
+
+def close_log(pid) do
+  File.close(pid)
+end
+```
+
 ### Protocols
 ```elixir
 defmodule RPG do
