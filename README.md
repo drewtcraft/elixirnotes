@@ -17,6 +17,19 @@ end)
 # see also: Agent.update
 ```
 
+### Comprehensions
+```elixir
+def get_combinations(tops, bottoms, opt \\ []) do
+  for t <- tops,
+      b <- bottoms, # zip tops and bottoms
+      # filters below
+      t[:base_color] != b[:base_color], 
+      b[:price] + t[:price] <= Keyword.get(opt, :maximum_price, 100) do
+    {t, b}
+  end
+end
+```
+
 ### Protocols
 ```elixir
 defmodule RPG do
