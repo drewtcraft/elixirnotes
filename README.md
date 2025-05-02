@@ -102,6 +102,13 @@ defmodule RPG do
 end
 ```
 
+### Tuple
+Extract via pipe
+```elixir
+{:heyo, "wahoo", 42}
+|> then(&elem(&1, 2)) # &1 refers to pipe argument
+```
+
 ### Error Handling
 Catch and return tuples.
 ```elixir
