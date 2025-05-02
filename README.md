@@ -46,6 +46,38 @@ def get_combinations(tops, bottoms, opt \\ []) do
 end
 ```
 
+### Custom Exceptions
+```elixir
+defmodule RPNCalculator.Exception do
+  defmodule DivisionByZeroError do
+    defexception message: "division by zero occurred"
+  end
+
+  defmodule StackUnderflowError do
+    defexception message: "stack underflow occurred"
+
+    # handle different values passed into exception
+    @impl true
+    def exception(value) do
+      cond do
+        is_binary(value) ->
+          %StackUnderflowError{}
+          |> Map.update!(:message, fn m ->
+            m <> ", context: " <> value
+          end)
+
+        true ->
+          %StackUnderflowError{}
+      end
+    end
+  end
+end
+
+# usage
+raise RPNCalculator.Exception.StackUnderflowError
+raise RPNCalculator.Exception.StackUnderflowError, "added exception context"
+```
+
 ### Files
 ```elixir
 def read_emails(path) do
