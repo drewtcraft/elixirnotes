@@ -130,6 +130,22 @@ defmodule RPG do
 end
 ```
 
+### Spec (typing, types)
+```elixir
+@type address_map :: %{street: String.t(), postal_code: String.t(), city: String.t()}
+@type address_tuple:: {street :: String.t(), postal_code :: String.t(), city :: String.t()}
+
+# union type
+@type address :: address_map() | address_tuple()
+
+# spec a method
+@spec blanks(n :: non_neg_integer()) :: String.t()
+def blanks(n) do
+  String.duplicate("X", n)
+end
+
+```
+
 ### Tuple
 Extract via pipe
 ```elixir
