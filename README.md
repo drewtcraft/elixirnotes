@@ -1,5 +1,22 @@
 # Elixir Notes
 
+### Agent
+```elixir
+# start agent with empty kwlist state
+pid = Agent.start(fn -> [] end)
+
+# get some piece of agent state
+Agent.get(pid, fn s -> Keyword.get(s, :registrations, []) end)
+
+# update agent state and retrieve value
+Agent.get_and_update(pid, fn s ->
+  new_state = [] # calc new state
+  {:return_value, new_state}
+end)
+
+# see also: Agent.update
+```
+
 ### Protocols
 ```elixir
 defmodule RPG do
