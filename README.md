@@ -17,6 +17,22 @@ end)
 # see also: Agent.update
 ```
 
+### Case
+```elixir
+def from_milliliter({_, amt}, unit) do
+  case unit do
+    :milliliter -> {unit, amt}
+    :cup -> {unit, amt / 240}
+    :fluid_ounce -> {unit, amt / 30}
+    :teaspoon -> {unit, amt / 5}
+    :tablespoon -> {unit, amt / 15}
+    _ -> {unit, amt}
+  end
+end
+
+# TODO can pattern match in here
+```
+
 ### Comprehensions
 ```elixir
 def get_combinations(tops, bottoms, opt \\ []) do
@@ -75,6 +91,15 @@ defmodule GuessingGame do
   def compare(secret_number, guess) when guess > secret_number, do: "Too high"
   def compare(secret_number, guess) when guess < secret_number, do: "Too low"
 end
+```
+
+### Pattern Matching
+```elixir
+def to_milliliter({:milliliter, amt}), do: {:milliliter, amt}
+def to_milliliter({:cup, amt}), do: {:milliliter, amt * 240}
+def to_milliliter({:fluid_ounce, amt}), do: {:milliliter, amt * 30}
+def to_milliliter({:teaspoon, amt}), do: {:milliliter, amt * 5}
+def to_milliliter({:tablespoon, amt}), do: {:milliliter, amt * 15}
 ```
 
 ### Processes
