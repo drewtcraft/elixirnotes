@@ -65,6 +65,34 @@ def close_log(pid) do
 end
 ```
 
+### Processes
+```elixir
+defmodule TakeANumber do
+  @spec start(initial_state :: integer()) :: pid()
+  def start(initial_state \\ 0) do
+    spawn(fn -> loop(initial_state) end)
+  end
+
+  @spec loop(state:: integer()) :: nil
+  def loop(state) do
+    receive do
+      {:report_state, pid} ->
+        send(pid, state)
+        loop(state)
+
+      {:take_a_number, pid} ->
+        send(pid, state + 1)
+        loop(state + 1)
+
+      :stop -> :ok # returning :ok stops execution??
+
+      _ -> loop state # always call loop to keep process alive
+    end
+    
+  end
+end
+```
+
 ### Protocols
 ```elixir
 defmodule RPG do
