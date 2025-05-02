@@ -1,6 +1,7 @@
 # Elixir Notes
 
 ### Agent
+TODO: why use agents instead of bare processes or genservers?
 ```elixir
 # start agent with empty kwlist state
 pid = Agent.start(fn -> [] end)
