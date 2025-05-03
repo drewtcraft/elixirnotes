@@ -234,3 +234,18 @@ def do_something(stack, operation) do
   end
 end
 ```
+
+### With
+```elixir
+def get_new_passport(now, birthday, form) do
+  with {:ok, ts} <- enter_building(now),
+       {:ok, manual_fn} <- find_counter_information(now),
+       counter <- manual_fn.(birthday),
+       {:ok, checksum} <- stamp_form(ts, counter, form) do
+    {:ok, get_new_passport_number(ts, counter, checksum)}
+  else
+    {:coffee_break, _} -> {:retry, NaiveDateTime.add(now, 15, :minute)}
+    err -> err
+  end
+end
+```
