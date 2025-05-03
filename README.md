@@ -136,6 +136,7 @@ def to_milliliter({:tablespoon, amt}), do: {:milliliter, amt * 15}
 ```
 
 ### Processes
+unlinked
 ```elixir
 defmodule TakeANumber do
   @spec start(initial_state :: integer()) :: pid()
@@ -161,6 +162,44 @@ defmodule TakeANumber do
     
   end
 end
+```
+
+linked
+```elixir
+def start_reliability_check(calculator, input) do
+  pid = spawn_link(fn -> calculator.(input) end)
+  %{input: input, pid: pid}
+end
+
+def await_reliability_check_result(%{pid: pid, input: input}, results) do
+  # receive will only match messages that fit these patterns
+  receive do
+    {:EXIT, ^pid, :normal} ->
+      Map.put(results, input, :ok)
+
+    {:EXIT, ^pid, {e, _}} when is_exception(e) ->
+      Map.put(results, input, :error)
+
+    {:EXIT, ^pid, _} ->
+      Map.put(results, input, :error)
+  after # timeout 100ms
+    100 -> Map.put(results, input, :timeout)
+  end
+end
+
+def reliability_check(calculator, inputs) do
+  # required to capture the {:EXIT, ...} tuples in the receive block
+  old_value = Process.flag(:trap_exit, true)
+
+  res =
+    inputs
+    |> Enum.map(&start_reliability_check(calculator, &1))
+    |> Enum.reduce(%{}, &await_reliability_check_result/2)
+
+  Process.flag(:trap_exit, old_value)
+  res
+end
+
 ```
 
 ### Protocols
